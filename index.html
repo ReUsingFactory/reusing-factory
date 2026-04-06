@@ -18,7 +18,7 @@
 </head>
 <body>
 <nav>
-  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;width:100%;flex-wrap:wrap">
+  <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;width:100%;padding:0 40px;flex-wrap:wrap">
   <div class="nlogo"><img src="Firmenlogo.png" alt="ReUsing Factory"></div>
   <div class="nlinks">
     <button onclick="sp('home')" id="nb-home" data-t="nav_home">Home</button>
@@ -38,13 +38,14 @@
 </nav>
 <div id="app">
 <div class="page active" id="page-home">
-  <div class="hero"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;width:100%"><div class="hero-text"><h1 data-t="hero_h1">CPU Pin Reparatur &<br><span>Mainboard Sockel Reparatur</span></h1><p style="margin-top:14px" data-t="hero_sub">Industrieverfahren · Originalteile · EU-Versand</p></div><div class="hero-logo"><img src="Firmenlogo.png" alt="ReUsing Factory"></div></div></div>
+  <div class="hero"><div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;width:100%;padding:0 40px"><div class="hero-text"><h1 data-t="hero_h1">CPU Pin Reparatur &<br><span>Mainboard Sockel Reparatur</span></h1><p style="margin-top:14px" data-t="hero_sub">Industrieverfahren · Originalteile · EU-Versand</p></div><div class="hero-logo"><img src="Firmenlogo.png" alt="ReUsing Factory"></div></div></div>
+  <div class="slogan"><span data-t="slogan">Spezielle Probleme erfordern den Spezialisten – seit 2015</span></div>
   <div class="cards-wrap">
     <div class="card" onclick="openCfg('cpu')"><div class="card-img cpu"><img src="RyzenAM4.png" alt="CPU"></div><div class="card-body"><h3 data-t="c1_h">CPU Pin Reparatur</h3><p data-t="c1_p">Verbogene oder abgebrochene Pins an AM4/AM3+ Prozessoren werden mit Industrieverfahren und Originalteilen repariert.</p></div><div class="chint" data-t="c1_hint">Ryzen AM4 · AM3+</div></div>
     <div class="card" onclick="openCfg('mainboard')"><div class="card-img sock"><img src="sockel.png" alt="Sockel"></div><div class="card-body"><h3 data-t="c2_h">Mainboard Sockel Reparatur</h3><p data-t="c2_p">Beschädigte CPU-Sockel werden repariert oder gegen fabrikneue ersetzt.</p></div><div class="chint" data-t="c2_hint">LGA 1151–1851 · LGA 2011/2066 · AM5</div></div>
     <div class="card" onclick="sp('ankauf')"><div class="card-img"><iframe src="slideshow.html" style="width:100%;height:100%;border:none;pointer-events:none"></iframe></div><div class="card-body"><h3 data-t="c3_h">Ankauf beschädigter Hardware</h3><p data-t="c3_p">Wir kaufen defekte Grafikkarten, Mainboards, Prozessoren und Server-Hardware an.</p></div><div class="chint" data-t="c3_hint">Grafikkarten · Mainboards · Prozessoren etc.</div></div>
   </div>
-  <div style="padding:0 40px 40px;max-width:1200px;margin:0 auto;width:100%">
+  <div style="padding:0 40px 40px;max-width:1280px;margin:0 auto;width:100%">
     <div style="border-left:3px solid var(--orange);padding-left:14px;margin-bottom:24px"><h2 style="font-size:clamp(1.1rem,2vw,1.5rem);font-weight:700;color:var(--blue);text-shadow:0 0 12px var(--blue-glow)" data-t="rev_title">Ihre Erfahrungen mit uns</h2></div>
     <div id="rev-list" class="cards-wrap" style="padding:0;margin-bottom:16px"></div>
     <div style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
