@@ -13,7 +13,7 @@ function sL(l){lang=l;document.querySelectorAll('.lb').forEach(b=>b.classList.to
 function sp(id){closeCfg();document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.nlinks button').forEach(b=>b.classList.remove('active'));var nb=document.getElementById('nb-'+id);if(nb)nb.classList.add('active');document.getElementById('app').scrollTop=0;if(id==='ankauf')agos(0);}
 // CONFIGURATOR
 var cs=1,ct=7;
-function openCfg(hw){cfg={hw:hw,sock:null,bent:null,pins:null,self:null,disasm:null,vip:null,dmg:'',country:'de',cname:'',cemail:'',addr:{}};photoCount=0;cs=1;ct=hw==='mainboard'?6:7;document.getElementById('cfg-tt').textContent=t(hw==='cpu'?'cfg_cpu':'cfg_mb');bPb();bS();document.getElementById('cfg-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function openCfg(hw){cfg={hw:hw,sock:null,bent:null,pins:null,self:null,disasm:null,vip:null,dmg:'',country:'de',cname:'',cemail:'',addr:{}};photoCount=0;cfgFiles=[];cs=1;ct=hw==='mainboard'?6:7;document.getElementById('cfg-tt').textContent=t(hw==='cpu'?'cfg_cpu':'cfg_mb');bPb();bS();document.getElementById('cfg-overlay').classList.add('open');document.body.style.overflow='hidden';}
 function closeCfg(){document.getElementById('cfg-overlay').classList.remove('open');document.body.style.overflow='';}
 function cPos(){var s=cfg.hw==='mainboard'?[1,3,4,5,6,7]:[1,2,3,4,5,6,7];return s.indexOf(cs)+1;}
 function bPb(){var pb=document.getElementById('pbar');pb.innerHTML='';var p=cPos();for(var i=1;i<=ct;i++){var d=document.createElement('div');d.className='ps'+(i<=p?' done':'');pb.appendChild(d);}document.getElementById('sctr').textContent=p+' / '+ct;}
@@ -51,7 +51,7 @@ function bS(){
       h+='<div class="sw-cfg"><div class="sw-imgs"><div class="sw-img-box w"><img src="Mainboard.png" alt="Falsch"><div class="sw-l w">'+t('sw1')+'</div></div><div class="sw-img-box r"><img src="zerlegt.png" alt="Richtig"><div class="sw-l r">'+t('sw2')+'</div></div></div><p style="font-size:0.8rem;color:var(--dim);margin-top:10px">'+t('swd')+'</p></div>';
       h+='<div class="tgrid" style="grid-template-columns:1fr 1fr"><div class="tile'+(cfg.disasm==='ja'?' sel':'')+'" onclick="cfg.disasm=\'ja\';bS()"><span class="ti">✅</span>'+t('s3y')+'</div><div class="tile'+(cfg.disasm==='nein'?' sel':'')+'" onclick="cfg.disasm=\'nein\';bS()"><span class="ti">🔧</span>'+t('s3n')+'</div></div></div>';
     }
-    h+='<div style="margin-top:16px"><div class="sq">'+t('s3fo')+'</div><input type="file" id="phu" multiple accept="image/*" style="background:rgba(5,15,30,0.9);border:1px solid var(--border2);color:var(--text);padding:10px;border-radius:2px;width:100%;font-size:0.84rem" onchange="chkP(this)"><div id="phpr" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"></div></div>';
+    h+='<div style="margin-top:16px"><div class="sq">'+t('s3fo')+'</div><label class="obtn" style="display:inline-block;cursor:pointer;font-size:0.82rem;padding:8px 16px"><input type="file" id="phu" multiple accept="image/*" style="display:none" onchange="chkP(this)">📷 '+t('s3fo').replace(/ *\(.*\)/,'')+'</label><div id="phpr" style="margin-top:8px;display:grid;gap:4px"></div></div>';
     var cn3=!isMB||cfg.disasm;if(cfg.hw==='cpu'&&cfg.pins==='6+'&&photoCount<1)cn3=false;
     if(cfg.hw==='cpu'&&cfg.pins==='6+')h+='<div class="hintbox" style="display:block">'+t('ph_req')+'</div>';
     h+='<div class="cnav"><button class="bbk" onclick="svD();gS(cfg.hw===\'mainboard\'?1:2)">'+t('bB')+'</button><button class="bnx" id="s3next"'+(cn3?'':' disabled')+' onclick="svD();gS(4)">'+t('bN')+'</button></div>';
@@ -91,7 +91,14 @@ function bS(){
   var ppC=document.getElementById('paypal-btn');if(ppC&&window.paypal_sdk){paypal_sdk.Buttons({style:{layout:'vertical',color:'gold',shape:'rect',label:'pay',height:45},createOrder:function(d,a){return a.order.create({purchase_units:[{description:(cfg.hw==='cpu'?'CPU Pin Reparatur':'Mainboard Sockel Reparatur'),amount:{currency_code:'EUR',value:cT().b.toFixed(2)}}]});},onApprove:function(d,a){return a.order.capture().then(function(){showThankYou();});},onCancel:function(){},onError:function(e){alert('PayPal Fehler: '+e);}}).render('#paypal-btn');}
 }
 function svD(){var e=document.getElementById('dmgtxt');if(e)cfg.dmg=e.value;}
-function chkP(i){var p=document.getElementById('phpr');p.innerHTML='';if(i.files.length>5){alert('Max 5');i.value='';photoCount=0;return;}photoCount=i.files.length;Array.from(i.files).forEach(function(f){var r=new FileReader();r.onload=function(e){p.innerHTML+='<img src="'+e.target.result+'" style="height:50px;border:1px solid var(--border);border-radius:2px">';};r.readAsDataURL(f);});if(cfg.hw==='cpu'&&cfg.pins==='6+'){var nb=document.getElementById('s3next');if(nb)nb.disabled=photoCount<1;}}
+var cfgFiles=[];
+function chkP(inp){
+Array.from(inp.files).forEach(function(f){if(cfgFiles.length<5)cfgFiles.push(f);});
+inp.value='';photoCount=cfgFiles.length;renderCfgPhotos();
+if(cfg.hw==='cpu'&&cfg.pins==='6+'){var nb=document.getElementById('s3next');if(nb)nb.disabled=photoCount<1;}}
+function cfgRemovePhoto(i){cfgFiles.splice(i,1);photoCount=cfgFiles.length;renderCfgPhotos();if(cfg.hw==='cpu'&&cfg.pins==='6+'){var nb=document.getElementById('s3next');if(nb)nb.disabled=photoCount<1;}}
+function renderCfgPhotos(){var el=document.getElementById('phpr');if(!el)return;el.innerHTML='';
+cfgFiles.forEach(function(f,i){el.innerHTML+='<div style="display:flex;align-items:center;gap:8px;background:rgba(5,15,30,0.6);padding:6px 10px;border-radius:2px;font-size:0.78rem;color:var(--dim)"><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">📎 '+f.name+'</span><span style="cursor:pointer;color:var(--red);font-weight:700" onclick="cfgRemovePhoto('+i+')">✕</span></div>';});}
 function vA(){var ids=['an','as','az','ac','ae'];for(var i=0;i<ids.length;i++){if(!document.getElementById(ids[i]).value.trim()){alert(t('aM'));return false;}}cfg.country=document.getElementById('aco').value;cfg.addr={n:document.getElementById('an').value,s:document.getElementById('as').value,z:document.getElementById('az').value,c:document.getElementById('ac').value,e:document.getElementById('ae').value};return true;}
 function gP(){if(cfg.hw==='cpu'){if(cfg.bent==='ja')return cfg.self==='ja'?CPUPR.bent_self:CPUPR.bent;return CPUPR[cfg.pins]||null;}return PR[cfg.sock]||null;}
 function cT(){var b=gP()||0;if(cfg.hw==='mainboard'&&cfg.disasm==='nein')b+=50;if(cfg.vip==='ja')b+=(VP[cfg.hw]||45);b+=(SH[cfg.country]||6.90);var n=+(b/1.19).toFixed(2);var m=+(b-n).toFixed(2);return{n:n,m:m,b:b};}
@@ -154,6 +161,7 @@ else if(n===5){submitAkOrder(c);}
 function renderAkIntro(c){
 c.innerHTML='<div class="cstep active"><div class="sq">'+t('ak_intro_title')+'</div>'+
 '<div id="ak-intro-scroll" style="max-height:400px;overflow-y:auto;background:rgba(5,15,30,0.9);border:1px solid var(--border);border-radius:3px;padding:20px;font-size:0.85rem;line-height:1.8;color:var(--dim)" onscroll="chkAkScroll()">'+
+'<p style="margin-bottom:14px;color:var(--orange);font-weight:700;font-size:0.85rem;font-style:italic">⬇ Bitte vorher bis nach unten durchlesen, danke!</p>'+
 '<p style="margin-bottom:14px;color:var(--blue);font-weight:700;font-size:1rem">Wir kaufen Ihre beschädigten Hardware-Komponenten an!</p>'+
 '<ul style="margin:0 0 16px 20px;list-style:disc"><li>Grafikkarten von NVidia & AMD</li><li>Mainboards von ASUS, Gigabyte, MSI usw.</li><li>Intel XEON Gold / Platinum etc.</li><li>Intel i3 / i5 / i7 Prozessoren</li><li>AMD Ryzen</li><li>etc.</li></ul>'+
 '<p style="margin-bottom:16px">Komponenten, die älter als 5 Jahre sind, sind in der Regel nicht mehr sehr interessant. Falls Sie jedoch der Meinung sind, doch etwas von Wert zu haben, geben Sie gerne Ihre Preisvorstellung ab.</p>'+
@@ -187,17 +195,18 @@ Object.keys(akS).forEach(function(k){if(k.startsWith('_'))return;
 var l=t(AKL[k]||'ak_other');
 h+='<div style="margin-bottom:20px;background:rgba(10,25,50,0.5);border:1px solid var(--border);border-radius:3px;padding:16px"><div style="font-family:\'Share Tech Mono\',monospace;font-size:0.8rem;color:var(--blue);margin-bottom:10px">'+l+'</div>'+
 '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">'+
-'<div><label style="font-size:0.72rem;color:var(--dim)">'+t('ak_ql')+'</label><input class="ta" id="aq_'+k+'" placeholder="1" style="resize:none;margin-top:4px;font-size:16px"></div>'+
-'<div><label style="font-size:0.72rem;color:var(--dim)">'+t('ak_pl')+' ('+cur.s+')</label><input class="ta" id="ap_'+k+'" placeholder="'+cur.s+'" style="resize:none;margin-top:4px;font-size:16px" oninput="akPriceInput(\''+k+'\')"><div id="apc_'+k+'" style="font-size:0.72rem;color:var(--ok);margin-top:4px;font-family:\'Share Tech Mono\',monospace"></div></div>'+
-'</div><textarea class="ta" id="af_'+k+'" rows="2" placeholder="'+t('ak_dl')+'..." style="font-size:16px"></textarea></div>';
+'<div><label style="font-size:0.72rem;color:var(--dim)">'+t('ak_ql')+'</label><input class="ta" id="aq_'+k+'" placeholder="1" value="'+(akS['_q_'+k]||'')+'" style="resize:none;margin-top:4px;font-size:16px"></div>'+
+'<div><label style="font-size:0.72rem;color:var(--dim)">'+t('ak_pl')+' ('+cur.s+')</label><input class="ta" id="ap_'+k+'" placeholder="'+cur.s+'" value="'+(akS['_p_'+k]||'')+'" style="resize:none;margin-top:4px;font-size:16px" oninput="akPriceInput(\''+k+'\')"><div id="apc_'+k+'" style="font-size:0.72rem;color:var(--ok);margin-top:4px;font-family:\'Share Tech Mono\',monospace"></div></div>'+
+'</div><textarea class="ta" id="af_'+k+'" rows="2" placeholder="'+t('ak_dl')+'..." style="font-size:16px">'+(akS['_d_'+k]||'')+'</textarea></div>';
 });
 h+='<div style="margin-top:12px"><div style="font-size:0.85rem;margin-bottom:8px">'+t('s3fo')+'</div>'+
 '<label class="obtn" style="display:inline-block;cursor:pointer;font-size:0.82rem;padding:8px 16px"><input type="file" id="ak-photos" multiple accept="image/*" style="display:none" onchange="akPhotoChange(this)">📷 '+t('s3fo').replace(/ *\(.*\)/,'')+'</label>'+
 '<div id="ak-photo-list" style="margin-top:8px;display:grid;gap:4px"></div></div>';
-h+='<div class="cnav"><button class="bbk" onclick="agos(1)">'+t('bB')+'</button><button class="bnx" onclick="agos(3)">'+t('bN')+'</button></div></div>';
+h+='<div class="cnav"><button class="bbk" onclick="saveAkDetails();agos(1)">'+t('bB')+'</button><button class="bnx" onclick="saveAkDetails();agos(3)">'+t('bN')+'</button></div></div>';
 c.innerHTML=h;
 renderAkPhotoList();
 }
+function saveAkDetails(){Object.keys(akS).forEach(function(k){if(k.startsWith('_'))return;var q=document.getElementById('aq_'+k),p=document.getElementById('ap_'+k),d=document.getElementById('af_'+k);if(q)akS['_q_'+k]=q.value;if(p)akS['_p_'+k]=p.value;if(d)akS['_d_'+k]=d.value;});}
 function akPhotoChange(inp){
 Array.from(inp.files).forEach(function(f){if(akFiles.length<5)akFiles.push(f);});
 inp.value='';renderAkPhotoList();
@@ -217,7 +226,7 @@ function saveAkContact(){var n=document.getElementById('ak_cn'),e=document.getEl
 function renderAkReview(c){
 var ls=[];var body='';
 Object.keys(akS).forEach(function(k){if(k.startsWith('_'))return;
-var l=t(AKL[k]||'ak_other'),q=(document.getElementById('aq_'+k)||{}).value||'1',p=(document.getElementById('ap_'+k)||{}).value||'—',d=(document.getElementById('af_'+k)||{}).value||'';
+var l=t(AKL[k]||'ak_other'),q=akS['_q_'+k]||'1',p=akS['_p_'+k]||'—',d=akS['_d_'+k]||'';
 var cur=getCurr(),pDisp=p+' '+cur.s;
 if(cur.r!==1&&p!=='—'){var eur=(parseFloat(p)*cur.r).toFixed(2);pDisp+=' (≈ ca. '+eur.replace('.',',')+' €)';}
 ls.push({label:l,qty:q,price:pDisp,details:d,key:k});
@@ -235,8 +244,10 @@ c.innerHTML=h;
 function submitAkOrder(c){
 var items=[];
 Object.keys(akS).forEach(function(k){if(k.startsWith('_'))return;
-var l=t(AKL[k]||'ak_other'),q=(document.getElementById('aq_'+k)||{}).value||'1',p=(document.getElementById('ap_'+k)||{}).value||'—',d=(document.getElementById('af_'+k)||{}).value||'';
-items.push(l+' ('+q+'x) – '+p+'€'+(d?' | '+d:''));
+var l=t(AKL[k]||'ak_other'),q=akS['_q_'+k]||'1',p=akS['_p_'+k]||'—',d=akS['_d_'+k]||'';
+var cur=getCurr(),pDisp=p+' '+cur.s;
+if(cur.r!==1&&p!=='—'){var eur=(parseFloat(p)*cur.r).toFixed(2);pDisp+=' (ca. '+eur.replace('.',',')+' €)';}
+items.push(l+' ('+q+'x) – '+pDisp+(d?' | '+d:''));
 });
 var data={access_key:'55063975-8c2f-4676-8af1-a36886eb2297',subject:'Ankaufsanfrage – ReUsing Factory',from_name:'ReUsing Factory Website',Name:akS._name||'',Email:akS._email||'',Telefon:akS._tel||'—',Adresse:akS._addr||'—',Artikel:items.join('\n'),Fotos:akFiles.length>0?akFiles.length+' Foto(s) (separat per Email)':'Keine'};
 c.innerHTML='<div style="text-align:center;padding:40px"><div style="font-size:2rem;margin-bottom:12px">⏳</div><p style="color:var(--dim)">Wird gesendet...</p></div>';
