@@ -159,18 +159,9 @@ else if(n===4){renderAkReview(c);}
 else if(n===5){submitAkOrder(c);}
 }
 function renderAkIntro(c){
-c.innerHTML='<div class="cstep active"><div class="sq">'+t('ak_intro_title')+' <span style="font-size:0.78rem;color:var(--orange);font-style:italic;font-weight:400">(Bitte vorher bis nach unten durchlesen, danke!)</span></div>'+
+c.innerHTML='<div class="cstep active"><div class="sq">'+t('ak_intro_title')+' <span style="font-size:0.78rem;color:var(--orange);font-style:italic;font-weight:400">'+t('ak_intro_hint')+'</span></div>'+
 '<div id="ak-intro-scroll" style="max-height:400px;overflow-y:auto;background:rgba(5,15,30,0.9);border:1px solid var(--border);border-radius:3px;padding:20px;font-size:0.85rem;line-height:1.8;color:var(--dim)" onscroll="chkAkScroll()">'+
-'<p style="margin-bottom:14px;color:var(--blue);font-weight:700;font-size:1rem">Wir kaufen Ihre beschädigten Hardware-Komponenten an!</p>'+
-'<ul style="margin:0 0 16px 20px;list-style:disc"><li>Grafikkarten von NVidia & AMD</li><li>Mainboards von ASUS, Gigabyte, MSI usw.</li><li>Intel XEON Gold / Platinum etc.</li><li>Intel i3 / i5 / i7 Prozessoren</li><li>AMD Ryzen</li><li>etc.</li></ul>'+
-'<p style="margin-bottom:16px">Komponenten, die älter als 5 Jahre sind, sind in der Regel nicht mehr sehr interessant. Falls Sie jedoch der Meinung sind, doch etwas von Wert zu haben, geben Sie gerne Ihre Preisvorstellung ab.</p>'+
-'<p style="margin-bottom:8px;color:var(--blue);font-weight:700">Voraussetzung für den Ankauf defekter Prozessoren:</p>'+
-'<ul style="margin:0 0 16px 20px;list-style:disc"><li>Teile unterhalb dürfen gebrochen / abgerissen / verbogen sein</li><li>Goldkontakte unterhalb dürfen (in Maßen) beschädigt sein</li><li>Der Heatspreader (Kupferdeckel) darf Kratzer haben</li><li>Die CPU darf angemackt sein, jedoch darf die <strong style="color:var(--orange)">Platine nicht gebrochen</strong> sein</li></ul>'+
-'<p style="margin-bottom:8px;color:var(--blue);font-weight:700">Voraussetzung für den Ankauf defekter Mainboards:</p>'+
-'<ul style="margin:0 0 16px 20px;list-style:disc"><li>Das Board sollte durchaus noch wertig sein. Alte AM3-Boards / grüne Boards (sofern keine höherwertigen wie z.\u00A0B. Supermicro etc.) oder außergewöhnliche Nicht-Consumer-Boards kaufen wir nicht an</li><li>Der Intel- oder AMD-Sockel darf beschädigt sein</li><li>Weitere Defekte wie zum Teil durchtrennte Leiterbahnen dürfen vorhanden sein. Kein Platinenbruch und keine Boards mit etlichen abgerissenen Bauteilen</li></ul>'+
-'<p style="margin-bottom:8px;color:var(--blue);font-weight:700">Was wir vermutlich nicht ankaufen:</p>'+
-'<ul style="margin:0 0 16px 20px;list-style:disc"><li>RAM-Module / Arbeitsspeicher</li><li>Netzteile</li><li>Gehäuse</li><li>Komplett-PCs, es sei denn in größeren gleichartigen Chargen</li><li>Laufwerke</li><li>Festplatten / SSDs</li></ul>'+
-'<p style="color:var(--ok)">Eine Anfrage schadet jedoch nie :-)</p>'+
+t('ak_intro_html')+
 '</div>'+
 '<div class="cnav"><span></span><button class="bnx" id="ak-intro-btn" disabled onclick="agos(1)">'+t('bN')+'</button></div></div>';
 }
@@ -184,8 +175,7 @@ c.innerHTML='<div class="cstep active"><div class="sq">'+t('ak_s1q')+'</div><div
 '</div><div class="multi-info">'+t('ak_multi')+'</div>'+
 '<div class="cnav"><button class="bbk" onclick="agos(0)">'+t('bB')+'</button><button class="bnx" id="an1"'+(Object.keys(akS).length===0?' disabled':'')+' onclick="agos(2)">'+t('bN')+'</button></div></div>';
 }
-var CURR={de:{s:'€',r:1},en:{s:'£',r:1.17},fr:{s:'€',r:1},it:{s:'€',r:1},pl:{s:'zł',r:0.23},es:{s:'€',r:1},nl:{s:'€',r:1}};
-function getCurr(){return CURR[lang]||CURR.de;}
+function getCurr(){return{s:'€',r:1};}
 function akPriceInput(k){var c=getCurr();var v=document.getElementById('ap_'+k);if(!v)return;var cv=document.getElementById('apc_'+k);if(!cv)return;var val=parseFloat(v.value);if(isNaN(val)||val<=0||c.r===1){cv.textContent='';return;}cv.textContent='≈ ca. '+(val*c.r).toFixed(2).replace('.',',')+' €';}
 function renderAkDetails(c){
 var cur=getCurr();
@@ -195,7 +185,7 @@ var l=t(AKL[k]||'ak_other');
 h+='<div style="margin-bottom:20px;background:rgba(10,25,50,0.5);border:1px solid var(--border);border-radius:3px;padding:16px"><div style="font-family:\'Share Tech Mono\',monospace;font-size:0.8rem;color:var(--blue);margin-bottom:10px">'+l+'</div>'+
 '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">'+
 '<div><label style="font-size:0.72rem;color:var(--dim)">'+t('ak_ql')+'</label><input class="ta" id="aq_'+k+'" placeholder="1" value="'+(akS['_q_'+k]||'')+'" style="resize:none;margin-top:4px;font-size:16px"></div>'+
-'<div><label style="font-size:0.72rem;color:var(--dim)">'+t('ak_pl')+' ('+cur.s+')</label><input class="ta" id="ap_'+k+'" placeholder="'+cur.s+'" value="'+(akS['_p_'+k]||'')+'" style="resize:none;margin-top:4px;font-size:16px" oninput="akPriceInput(\''+k+'\')"><div id="apc_'+k+'" style="font-size:0.72rem;color:var(--ok);margin-top:4px;font-family:\'Share Tech Mono\',monospace"></div></div>'+
+'<div><label style="font-size:0.72rem;color:var(--dim)">'+t('ak_pl')+'</label><input class="ta" id="ap_'+k+'" placeholder="€" value="'+(akS['_p_'+k]||'')+'" style="resize:none;margin-top:4px;font-size:16px"></div>'+
 '</div><textarea class="ta" id="af_'+k+'" rows="2" placeholder="'+t('ak_dl')+'..." style="font-size:16px">'+(akS['_d_'+k]||'')+'</textarea></div>';
 });
 h+='<div style="margin-top:12px"><div style="font-size:0.85rem;margin-bottom:8px">'+t('s3fo')+'</div>'+
