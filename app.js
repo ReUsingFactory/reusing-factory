@@ -7,10 +7,10 @@ let lang='de',cfg={},akS={},photoCount=0;
 
 function t(k){return(T[lang]&&T[lang][k])||T.de[k]||k}
 function chk5(){var b=document.getElementById('s5next');if(b)b.disabled=!(cfg.country&&cfg.cname&&cfg.cemail);}
-function submitOrder(){var sl=(cfg.hw==='cpu'?SCPU:SMB).find(function(s){return s.v===cfg.sock;}),tot=cT();var d={access_key:'55063975-8c2f-4676-8af1-a36886eb2297',subject:'Neuer Auftrag – ReUsing Factory',from_name:'ReUsing Factory Website','Hardware-Typ':cfg.hw==='cpu'?'CPU Pin Reparatur':'Mainboard Sockel Reparatur','Sockel':sl?sl.l:cfg.sock,'Nur verbogen':cfg.bent==='ja'?'Ja':'Nein','Abgebrochene Pins':cfg.pins||'—','Eigenversuch':cfg.self==='ja'?'Ja':'Nein','Zerlegung durch uns':cfg.hw==='mainboard'?(cfg.disasm==='nein'?'Ja (+50€)':'Nein, bereits zerlegt'):'—','VIP Express':cfg.vip==='ja'?'Ja':'Nein','Schadensbeschreibung':cfg.dmg||'—','Versand':cfg.country==='de'?'Deutschland (6,90€)':'EU-Ausland (16,90€)','Kundenname':cfg.cname||'','Kunden-Email':cfg.cemail||'','Netto':fm(tot.n),'MwSt (19%)':fm(tot.m),'Brutto Gesamt':fm(tot.b)};fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(d)}).catch(function(){});}
+function submitOrder(){var sl=(cfg.hw==='cpu'?SCPU:SMB).find(function(s){return s.v===cfg.sock;}),tot=cT();var d={access_key:'55063975-8c2f-4676-8af1-a36886eb2297',subject:'Neuer Auftrag – ReUsing Factory',from_name:'ReUsing Factory Website','Hardware-Typ':cfg.hw==='cpu'?'CPU Pin Reparatur':'Mainboard Sockel Reparatur','Sockel':sl?sl.l:cfg.sock,'Nur verbogen':cfg.bent==='ja'?'Ja':'Nein','Abgebrochene Pins':cfg.pins||'—','Eigenversuch':cfg.self==='ja'?'Ja':'Nein','Zerlegung durch uns':cfg.hw==='mainboard'?(cfg.disasm==='nein'?'Ja (+50€)':'Nein, bereits zerlegt'):'—','VIP Express':cfg.vip==='ja'?'Ja':'Nein','Schadensbeschreibung':cfg.dmg||'—','Versand':cfg.country==='de'?'Deutschland (6,90€)':'EU-Ausland (16,90€)','Kundenname':cfg.cname||'','Kunden-Email':cfg.cemail||'','Netto':fm(tot.n),'MwSt (19%)':fm(tot.m),'Brutto Gesamt':fm(tot.b),'AGB akzeptiert':'Ja','Widerrufsbelehrung gelesen':'Ja','Dienstleistungsbeginn vor Widerrufsfrist':'Ja','Zeitstempel':new Date().toISOString()};fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(d)}).catch(function(){});}
 function aT(){document.querySelectorAll('[data-t]').forEach(el=>{el.innerHTML=t(el.dataset.t)});}
-function sL(l){lang=l;document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));aT();if(document.getElementById('cfg-overlay').classList.contains('open')){document.getElementById('cfg-tt').textContent=t(cfg.hw==='cpu'?'cfg_cpu':'cfg_mb');bS();}}
-function sp(id){closeCfg();document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.nlinks button').forEach(b=>b.classList.remove('active'));var nb=document.getElementById('nb-'+id);if(nb)nb.classList.add('active');document.getElementById('app').scrollTop=0;}
+function sL(l){lang=l;document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));aT();if(document.getElementById('cfg-overlay').classList.contains('open')){document.getElementById('cfg-tt').textContent=t(cfg.hw==='cpu'?'cfg_cpu':'cfg_mb');bS();}if(document.getElementById('page-ankauf').classList.contains('active'))agos(akStep);}
+function sp(id){closeCfg();document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.nlinks button').forEach(b=>b.classList.remove('active'));var nb=document.getElementById('nb-'+id);if(nb)nb.classList.add('active');document.getElementById('app').scrollTop=0;if(id==='ankauf')agos(0);}
 // CONFIGURATOR
 var cs=1,ct=7;
 function openCfg(hw){cfg={hw:hw,sock:null,bent:null,pins:null,self:null,disasm:null,vip:null,dmg:'',country:'de',cname:'',cemail:'',addr:{}};photoCount=0;cs=1;ct=hw==='mainboard'?6:7;document.getElementById('cfg-tt').textContent=t(hw==='cpu'?'cfg_cpu':'cfg_mb');bPb();bS();document.getElementById('cfg-overlay').classList.add('open');document.body.style.overflow='hidden';}
@@ -25,12 +25,12 @@ function bS(){
     (cfg.hw==='cpu'?SCPU:SMB).forEach(function(s){h+='<div class="tile'+(cfg.sock===s.v?' sel':'')+'" onclick="cfg.sock=\''+s.v+'\';gS(cfg.hw===\'mainboard\'?3:2)">'+s.l+'</div>';});
     h+='</div><div class="cnav"><span></span></div>';
   }else if(cs===2){
-    h+='<div class="sq">'+t('s2bent')+'</div><div class="s2row"><img src="Goldpin.png" class="s2icon" alt="Pin"><div class="s2btns s2b2">';
+    h+='<div class="sq">'+t('s2bent')+'</div><div class="s2row"><img src="goldpin.png" class="s2icon" alt="Pin"><div class="s2btns s2b2">';
     h+='<div class="tile'+(cfg.bent==='ja'?' sel':'')+'" onclick="cfg.bent=\'ja\';cfg.pins=null;bS()"><strong>'+t('tY')+'</strong></div>';
     h+='<div class="tile'+(cfg.bent==='nein'?' sel':'')+'" onclick="cfg.bent=\'nein\';bS()"><strong>'+t('tN')+'</strong></div>';
     h+='</div></div>';
     if(cfg.bent==='nein'){
-      h+='<div class="sq" style="margin-top:22px">'+t('s2p')+'</div><div class="s2row"><img src="Goldpin.png" class="s2icon" alt="Pin"><div class="s2btns">';
+      h+='<div class="sq" style="margin-top:22px">'+t('s2p')+'</div><div class="s2row"><img src="goldpin.png" class="s2icon" alt="Pin"><div class="s2btns">';
       [['1-2',t('p12')],['3-6',t('p36')],['6+',t('p6p')]].forEach(function(a){h+='<div class="tile'+(cfg.pins===a[0]?' sel':'')+'" onclick="cfg.pins=\''+a[0]+'\';bS()"><strong>'+a[1]+'</strong></div>';});
       h+='</div></div>';
     }
@@ -70,6 +70,8 @@ function bS(){
     if(needDisc)h+='<div class="hintbox" style="display:block;margin-bottom:12px">'+t('disc_main')+'</div>';
     h+='<div style="margin-top:16px;display:grid;gap:10px">';
     h+='<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:0.86rem"><input type="checkbox" class="cfgck" style="margin-top:3px;flex-shrink:0;width:18px;height:18px"> <span>'+t('s6a')+'</span></label>';
+    h+='<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:0.86rem"><input type="checkbox" class="cfgck" style="margin-top:3px;flex-shrink:0;width:18px;height:18px"> <span>'+t('s6a_wid')+'</span></label>';
+    h+='<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:0.86rem"><input type="checkbox" class="cfgck" style="margin-top:3px;flex-shrink:0;width:18px;height:18px"> <span>'+t('s6a_dl')+'</span></label>';
     if(needDisc)h+='<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:0.86rem"><input type="checkbox" class="cfgck" style="margin-top:3px;flex-shrink:0;width:18px;height:18px"> <span>'+t('disc_main_ck')+'</span></label>';
     h+='</div>';
     h+='<div class="cnav"><button class="bbk" onclick="gS(5)">'+t('bB')+'</button><button class="bnx" id="pbtn" disabled onclick="submitOrder();gS(7)">'+t('bN')+'</button></div>';
@@ -98,11 +100,13 @@ function bInv(){
   var b=gP(),sl=(cfg.hw==='cpu'?SCPU:SMB).find(function(s){return s.v===cfg.sock;}),sn=sl?sl.l:'—',rl=t(cfg.hw==='cpu'?'cfg_cpu':'cfg_mb');
   var h='<div class="inv"><div class="inv-r hd"><span>'+t('iP')+'</span><span class="p">'+t('iPr')+'</span></div>';
   h+='<div class="inv-r"><span>'+rl+'<br><small style="color:var(--dim)">'+sn+'</small></span><span class="p">'+fm(b)+'</span></div>';
+  if(cfg.hw==='cpu'){h+='<div class="inv-r" style="color:var(--ok);text-shadow:0 0 8px rgba(0,230,118,0.4)"><span>✓ '+t('iClean')+'</span><span class="p">0,00 €</span></div>';h+='<div class="inv-r" style="color:var(--ok);text-shadow:0 0 8px rgba(0,230,118,0.4)"><span>✓ '+t('iTest')+'</span><span class="p">0,00 €</span></div>';}
+  if(cfg.hw==='mainboard'){h+='<div class="inv-r" style="color:var(--ok);text-shadow:0 0 8px rgba(0,230,118,0.4)"><span>✓ '+t('iTest')+'</span><span class="p">0,00 €</span></div>';}
   if(cfg.hw==='cpu'){var pinInfo=cfg.bent==='ja'?t('iBent'):(t('iPn')+': '+cfg.pins);h+='<div class="inv-r"><span>'+pinInfo+'</span><span class="p">—</span></div>';
   h+='<div class="inv-r"><span>'+t('iS')+': '+(cfg.self==='ja'?t('tY'):t('tN'))+'</span><span class="p">—</span></div>';}
   if(cfg.hw==='mainboard'&&cfg.disasm==='nein')h+='<div class="inv-r"><span>'+t('iD')+'</span><span class="p">'+fm(50)+'</span></div>';
   if(cfg.vip==='ja')h+='<div class="inv-r"><span>'+t('iV')+'</span><span class="p">'+fm(VP[cfg.hw]||35)+'</span></div>';
-  h+='<div class="inv-r"><span>'+t('iSh')+' ('+(cfg.country==='de'?'DE':'EU')+')</span><span class="p">'+fm(SH[cfg.country]||6.90)+'</span></div>';
+  h+='<div class="inv-r"><span>'+t('iSh')+' ('+(cfg.country==='de'?'DE':'EU')+') <small style="color:var(--dim)">'+t('iSh_dhl')+'</small></span><span class="p">'+fm(SH[cfg.country]||6.90)+'</span></div>';
   var tot=cT();
   h+='<div class="inv-r" style="border-top:2px solid var(--border)"><span>'+t('iN')+'</span><span class="p">'+fm(tot.n)+'</span></div>';
   h+='<div class="inv-r"><span>'+t('iM')+'</span><span class="p">'+fm(tot.m)+'</span></div>';
@@ -116,10 +120,6 @@ function subO(m){
   h+='<div style="text-align:left;background:rgba(41,171,226,0.06);border:1px solid var(--border);border-radius:2px;padding:16px;margin-bottom:16px"><strong style="color:var(--blue)">'+t('sT')+'</strong><br><br>'+t('sA')+'<br><br><em style="color:var(--dim);font-size:0.82rem">'+t('sH')+'</em></div>';
   h+='<button class="bbk" onclick="closeCfg()" style="margin-top:8px">'+t('bR')+'</button></div>';
   document.getElementById('cfg-s').innerHTML=h;document.getElementById('pbar').style.display='none';document.getElementById('sctr').textContent='';
-  var body='Reparaturauftrag\n\nKunde: '+(cfg.cname||'')+'\nEmail: '+(cfg.cemail||'')+'\n\nHardware: '+cfg.hw+'\nSockel: '+cfg.sock+(cfg.hw==='cpu'?'\nVerbogen: '+cfg.bent+'\nPins: '+(cfg.pins||'nur verbogen')+'\nEigenversuch: '+cfg.self:'\nZerlegung: '+cfg.disasm)+'\nVIP: '+cfg.vip+'\nVersand: '+cfg.country+'\nZahlung: '+m+'\n\nNetto: '+fm(tot.n)+'\nMwSt: '+fm(tot.m)+'\nBrutto: '+fm(tot.b);
-  if(cfg.addr.n)body+='\n\nAdresse: '+cfg.addr.s+', '+cfg.addr.z+' '+cfg.addr.c;
-  if(cfg.dmg)body+='\n\nSchaden: '+cfg.dmg;
-  location.href='mailto:kontakt@reusing-factory.de?subject='+encodeURIComponent('Reparaturauftrag – ReUsing Factory')+'&body='+encodeURIComponent(body);
 }
 function showBankAddr(){
   var c=document.getElementById('cfg-s');
@@ -132,16 +132,121 @@ function showBankAddr(){
   h+='<div class="cnav"><button class="bbk" onclick="gS(7)">'+t('bB')+'</button><button class="bnx" onclick="if(vA())subO(\'bank\')">'+t('bS')+'</button></div></div>';
   c.innerHTML=h;
 }
-function openAgb(){document.getElementById('agb-mb').innerHTML=document.getElementById('agb-txt').innerHTML;document.getElementById('agb-m').classList.add('open');}
+function openAgb(){document.getElementById('agb-mb').innerHTML=document.getElementById('agb-txt').innerHTML;document.getElementById('agb-m-title').textContent=t('nav_agb');document.getElementById('agb-m').classList.add('open');}
+function openWid(){document.getElementById('agb-mb').innerHTML=document.getElementById('wid-txt').innerHTML;document.getElementById('agb-m-title').textContent=t('nav_widerruf');document.getElementById('agb-m').classList.add('open');}
 function closeAgb(){document.getElementById('agb-m').classList.remove('open');}
-function sendCF(){var n=document.getElementById('cf_n').value,e=document.getElementById('cf_e').value,m=document.getElementById('cf_m').value;if(!n||!e||!m){alert(t('aM'));return;}location.href='mailto:kontakt@reusing-factory.de?subject='+encodeURIComponent('Kontaktanfrage – '+n)+'&body='+encodeURIComponent('Von: '+n+' ('+e+')\n\n'+m);}
+function sendCF(){var n=document.getElementById('cf_n').value,e=document.getElementById('cf_e').value,m=document.getElementById('cf_m').value;if(!n||!e||!m){alert(t('aM'));return;}var btn=document.querySelector('#page-kontakt .obtn');btn.disabled=true;btn.textContent='...';fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'55063975-8c2f-4676-8af1-a36886eb2297',subject:'Kontaktanfrage – '+n,from_name:'ReUsing Factory Website',Name:n,Email:e,Nachricht:m})}).then(function(r){return r.json()}).then(function(){btn.textContent='✓ Gesendet!';btn.style.background='var(--ok)';document.getElementById('cf_n').value='';document.getElementById('cf_e').value='';document.getElementById('cf_m').value='';setTimeout(function(){btn.disabled=false;btn.textContent='Nachricht senden';btn.style.background='';},3000);}).catch(function(){btn.disabled=false;btn.textContent='Nachricht senden';alert('Fehler – bitte direkt per Email kontaktieren.');});}
 // ANKAUF
+var akStep=0,akFiles=[];
+var AKL={grafikkarte:'ak_gpu',mainboard:'ak_mb',cpu:'ak_cpu',andere:'ak_other'};
 function akTile(el){el.classList.toggle('sel');var v=el.dataset.val;if(akS[v])delete akS[v];else akS[v]=1;document.getElementById('an1').disabled=Object.keys(akS).length===0;}
-function agos(n){document.querySelectorAll('#page-ankauf .cstep').forEach(function(s){s.classList.remove('active');});document.getElementById('acs'+n).classList.add('active');document.getElementById('asctr').textContent=n+'/3';for(var i=1;i<=3;i++)document.getElementById('apb'+i).classList.toggle('done',i<=n);if(n===2)rAkF();if(n===3)rAkE();}
-var AKL={gpu:'ak_gpu',mainboard:'ak_mb',cpu:'ak_cpu',server:'ak_srv',sonstiges:'ak_other'};
-function rAkF(){var c=document.getElementById('ak-fields');c.innerHTML='';Object.keys(akS).forEach(function(k){var l=t(AKL[k]||'ak_other');c.innerHTML+='<div style="margin-bottom:20px;background:rgba(10,25,50,0.5);border:1px solid var(--border);border-radius:3px;padding:16px"><div style="font-family:\'Share Tech Mono\',monospace;font-size:0.8rem;color:var(--blue);margin-bottom:10px">'+l+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px"><div><label style="font-size:0.72rem;color:var(--dim)">'+t('ak_ql')+'</label><input class="ta" type="number" id="aq_'+k+'" value="1" min="1" style="resize:none;margin-top:4px"></div><div><label style="font-size:0.72rem;color:var(--dim)">'+t('ak_pl')+'</label><input class="ta" type="number" id="ap_'+k+'" placeholder="€" style="resize:none;margin-top:4px"></div></div><textarea class="ta" id="af_'+k+'" rows="2" placeholder="'+t('ak_dl')+'..."></textarea></div>';});c.innerHTML+='<div style="margin-top:12px"><div style="font-size:0.85rem;margin-bottom:8px">'+t('s3fo')+'</div><input type="file" multiple accept="image/*" style="background:rgba(5,15,30,0.9);border:1px solid var(--border2);color:var(--text);padding:10px;border-radius:2px;width:100%;font-size:0.84rem"></div>';}
-function rAkE(){var ls=[];Object.keys(akS).forEach(function(k){var l=t(AKL[k]||'ak_other'),q=(document.getElementById('aq_'+k)||{}).value||'1',p=(document.getElementById('ap_'+k)||{}).value||'—',d=(document.getElementById('af_'+k)||{}).value||'';ls.push(l+' ('+q+'x) – Preis: '+p+'€\n'+d+'\n');});var body='Ankaufsanfrage\n\n'+ls.join('---\n')+'\nBitte Name, Adresse und Tel. ergänzen.';document.getElementById('akpre').textContent=body;document.getElementById('akmbtn').href='mailto:kontakt@reusing-factory.de?subject='+encodeURIComponent('Ankaufsanfrage – ReUsing Factory')+'&body='+encodeURIComponent(body);}
-function resetAk(){akS={};document.querySelectorAll('#acs1 .tile').forEach(function(t){t.classList.remove('sel');});document.getElementById('an1').disabled=true;agos(1);}
+function agos(n){akStep=n;var c=document.getElementById('ak-body'),totalSteps=5;
+var pb='';for(var i=1;i<=totalSteps;i++)pb+='<div class="ps'+(i<=n?' done':'')+'"></div>';
+document.getElementById('ak-pbar').innerHTML=pb;
+document.getElementById('asctr').textContent=n+'/'+totalSteps;
+if(n===0){renderAkIntro(c);}
+else if(n===1){renderAkTiles(c);}
+else if(n===2){renderAkDetails(c);}
+else if(n===3){renderAkContact(c);}
+else if(n===4){renderAkReview(c);}
+else if(n===5){submitAkOrder(c);}
+}
+function renderAkIntro(c){
+c.innerHTML='<div class="cstep active"><div class="sq">'+t('ak_intro_title')+'</div>'+
+'<div id="ak-intro-scroll" style="max-height:400px;overflow-y:auto;background:rgba(5,15,30,0.9);border:1px solid var(--border);border-radius:3px;padding:20px;font-size:0.85rem;line-height:1.8;color:var(--dim)" onscroll="chkAkScroll()">'+
+'<p style="margin-bottom:14px;color:var(--blue);font-weight:700;font-size:1rem">Wir kaufen Ihre beschädigten Hardware-Komponenten an!</p>'+
+'<ul style="margin:0 0 16px 20px;list-style:disc"><li>Grafikkarten von NVidia & AMD</li><li>Mainboards von ASUS, Gigabyte, MSI usw.</li><li>Intel XEON Gold / Platinum etc.</li><li>Intel i3 / i5 / i7 Prozessoren</li><li>AMD Ryzen</li><li>etc.</li></ul>'+
+'<p style="margin-bottom:16px">Komponenten, die älter als 5 Jahre sind, sind in der Regel nicht mehr sehr interessant. Falls Sie jedoch der Meinung sind, doch etwas von Wert zu haben, geben Sie gerne Ihre Preisvorstellung ab.</p>'+
+'<p style="margin-bottom:8px;color:var(--blue);font-weight:700">Voraussetzung für den Ankauf defekter Prozessoren:</p>'+
+'<ul style="margin:0 0 16px 20px;list-style:disc"><li>Teile unterhalb dürfen gebrochen / abgerissen / verbogen sein</li><li>Goldkontakte unterhalb dürfen (in Maßen) beschädigt sein</li><li>Der Heatspreader (Kupferdeckel) darf Kratzer haben</li><li>Die CPU darf angemackt sein, jedoch darf die <strong style="color:var(--orange)">Platine nicht gebrochen</strong> sein</li></ul>'+
+'<p style="margin-bottom:8px;color:var(--blue);font-weight:700">Voraussetzung für den Ankauf defekter Mainboards:</p>'+
+'<ul style="margin:0 0 16px 20px;list-style:disc"><li>Das Board sollte durchaus noch wertig sein. Alte AM3-Boards / grüne Boards (sofern keine höherwertigen wie z.\u00A0B. Supermicro etc.) oder außergewöhnliche Nicht-Consumer-Boards kaufen wir nicht an</li><li>Der Intel- oder AMD-Sockel darf beschädigt sein</li><li>Weitere Defekte wie zum Teil durchtrennte Leiterbahnen dürfen vorhanden sein. Kein Platinenbruch und keine Boards mit etlichen abgerissenen Bauteilen</li></ul>'+
+'<p style="margin-bottom:8px;color:var(--blue);font-weight:700">Was wir vermutlich nicht ankaufen:</p>'+
+'<ul style="margin:0 0 16px 20px;list-style:disc"><li>RAM-Module / Arbeitsspeicher</li><li>Netzteile</li><li>Gehäuse</li><li>Komplett-PCs, es sei denn in größeren gleichartigen Chargen</li><li>Laufwerke</li><li>Festplatten / SSDs</li></ul>'+
+'<p style="color:var(--ok)">Eine Anfrage schadet jedoch nie :-)</p>'+
+'</div>'+
+'<div class="cnav"><span></span><button class="bnx" id="ak-intro-btn" disabled onclick="agos(1)">'+t('bN')+'</button></div></div>';
+}
+function chkAkScroll(){var el=document.getElementById('ak-intro-scroll');if(!el)return;if(el.scrollTop+el.clientHeight>=el.scrollHeight-20){var b=document.getElementById('ak-intro-btn');if(b)b.disabled=false;}}
+function renderAkTiles(c){
+c.innerHTML='<div class="cstep active"><div class="sq">'+t('ak_s1q')+'</div><div class="tgrid">'+
+'<div class="tile'+(akS.grafikkarte?' sel':'')+'" data-val="grafikkarte" onclick="akTile(this)"><span class="ti">🎮</span>'+t('ak_gpu')+'</div>'+
+'<div class="tile'+(akS.mainboard?' sel':'')+'" data-val="mainboard" onclick="akTile(this)"><span class="ti">🖥️</span>'+t('ak_mb')+'</div>'+
+'<div class="tile'+(akS.cpu?' sel':'')+'" data-val="cpu" onclick="akTile(this)"><span class="ti">💻</span>'+t('ak_cpu')+'</div>'+
+'<div class="tile'+(akS.andere?' sel':'')+'" data-val="andere" onclick="akTile(this)"><span class="ti">📦</span>'+t('ak_other')+'</div>'+
+'</div><div class="multi-info">'+t('ak_multi')+'</div>'+
+'<div class="cnav"><button class="bbk" onclick="agos(0)">'+t('bB')+'</button><button class="bnx" id="an1"'+(Object.keys(akS).length===0?' disabled':'')+' onclick="agos(2)">'+t('bN')+'</button></div></div>';
+}
+var CURR={de:{s:'€',r:1},en:{s:'£',r:1.17},fr:{s:'€',r:1},it:{s:'€',r:1},pl:{s:'zł',r:0.23},es:{s:'€',r:1},nl:{s:'€',r:1}};
+function getCurr(){return CURR[lang]||CURR.de;}
+function akPriceInput(k){var c=getCurr();var v=document.getElementById('ap_'+k);if(!v)return;var cv=document.getElementById('apc_'+k);if(!cv)return;var val=parseFloat(v.value);if(isNaN(val)||val<=0||c.r===1){cv.textContent='';return;}cv.textContent='≈ ca. '+(val*c.r).toFixed(2).replace('.',',')+' €';}
+function renderAkDetails(c){
+var cur=getCurr();
+var h='<div class="cstep active">';
+Object.keys(akS).forEach(function(k){if(k.startsWith('_'))return;
+var l=t(AKL[k]||'ak_other');
+h+='<div style="margin-bottom:20px;background:rgba(10,25,50,0.5);border:1px solid var(--border);border-radius:3px;padding:16px"><div style="font-family:\'Share Tech Mono\',monospace;font-size:0.8rem;color:var(--blue);margin-bottom:10px">'+l+'</div>'+
+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">'+
+'<div><label style="font-size:0.72rem;color:var(--dim)">'+t('ak_ql')+'</label><input class="ta" id="aq_'+k+'" placeholder="1" style="resize:none;margin-top:4px;font-size:16px"></div>'+
+'<div><label style="font-size:0.72rem;color:var(--dim)">'+t('ak_pl')+' ('+cur.s+')</label><input class="ta" id="ap_'+k+'" placeholder="'+cur.s+'" style="resize:none;margin-top:4px;font-size:16px" oninput="akPriceInput(\''+k+'\')"><div id="apc_'+k+'" style="font-size:0.72rem;color:var(--ok);margin-top:4px;font-family:\'Share Tech Mono\',monospace"></div></div>'+
+'</div><textarea class="ta" id="af_'+k+'" rows="2" placeholder="'+t('ak_dl')+'..." style="font-size:16px"></textarea></div>';
+});
+h+='<div style="margin-top:12px"><div style="font-size:0.85rem;margin-bottom:8px">'+t('s3fo')+'</div>'+
+'<label class="obtn" style="display:inline-block;cursor:pointer;font-size:0.82rem;padding:8px 16px"><input type="file" id="ak-photos" multiple accept="image/*" style="display:none" onchange="akPhotoChange(this)">📷 '+t('s3fo').replace(/ *\(.*\)/,'')+'</label>'+
+'<div id="ak-photo-list" style="margin-top:8px;display:grid;gap:4px"></div></div>';
+h+='<div class="cnav"><button class="bbk" onclick="agos(1)">'+t('bB')+'</button><button class="bnx" onclick="agos(3)">'+t('bN')+'</button></div></div>';
+c.innerHTML=h;
+renderAkPhotoList();
+}
+function akPhotoChange(inp){
+Array.from(inp.files).forEach(function(f){if(akFiles.length<5)akFiles.push(f);});
+inp.value='';renderAkPhotoList();
+}
+function akRemovePhoto(i){akFiles.splice(i,1);renderAkPhotoList();}
+function renderAkPhotoList(){var el=document.getElementById('ak-photo-list');if(!el)return;el.innerHTML='';
+akFiles.forEach(function(f,i){el.innerHTML+='<div style="display:flex;align-items:center;gap:8px;background:rgba(5,15,30,0.6);padding:6px 10px;border-radius:2px;font-size:0.78rem;color:var(--dim)"><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">📎 '+f.name+'</span><span style="cursor:pointer;color:var(--red);font-weight:700" onclick="akRemovePhoto('+i+')">✕</span></div>';});}
+function renderAkContact(c){
+c.innerHTML='<div class="cstep active"><div class="sq">'+t('s5n')+'</div><div style="display:grid;gap:10px">'+
+'<input class="ta" id="ak_cn" placeholder="'+t('s5n')+'" value="'+(akS._name||'')+'" style="resize:none;font-size:16px">'+
+'<input class="ta" id="ak_ce" type="email" placeholder="'+t('ak_email')+'" value="'+(akS._email||'')+'" style="resize:none;font-size:16px">'+
+'<input class="ta" id="ak_ct" placeholder="'+t('ak_tel')+'" value="'+(akS._tel||'')+'" style="resize:none;font-size:16px">'+
+'<input class="ta" id="ak_ca" placeholder="'+t('ak_addr')+'" value="'+(akS._addr||'')+'" style="resize:none;font-size:16px">'+
+'</div><div class="cnav"><button class="bbk" onclick="saveAkContact();agos(2)">'+t('bB')+'</button><button class="bnx" onclick="saveAkContact();if(!akS._name||!akS._email){alert(t(\'aM\'));return;}agos(4)">'+t('bN')+'</button></div></div>';
+}
+function saveAkContact(){var n=document.getElementById('ak_cn'),e=document.getElementById('ak_ce'),tl=document.getElementById('ak_ct'),a=document.getElementById('ak_ca');if(n)akS._name=n.value;if(e)akS._email=e.value;if(tl)akS._tel=tl.value;if(a)akS._addr=a.value;}
+function renderAkReview(c){
+var ls=[];var body='';
+Object.keys(akS).forEach(function(k){if(k.startsWith('_'))return;
+var l=t(AKL[k]||'ak_other'),q=(document.getElementById('aq_'+k)||{}).value||'1',p=(document.getElementById('ap_'+k)||{}).value||'—',d=(document.getElementById('af_'+k)||{}).value||'';
+var cur=getCurr(),pDisp=p+' '+cur.s;
+if(cur.r!==1&&p!=='—'){var eur=(parseFloat(p)*cur.r).toFixed(2);pDisp+=' (≈ ca. '+eur.replace('.',',')+' €)';}
+ls.push({label:l,qty:q,price:pDisp,details:d,key:k});
+body+=l+' ('+q+'x) – '+pDisp+'\n'+(d?d+'\n':'');
+});
+var h='<div class="cstep active"><div class="sq">'+t('ak_s3q')+'</div>';
+h+='<div style="background:rgba(5,15,30,0.9);border:1px solid var(--border);border-radius:3px;padding:16px;margin-bottom:14px">';
+ls.forEach(function(it){h+='<div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)"><strong style="color:var(--blue)">'+it.label+'</strong> ('+it.qty+'x) — '+it.price+(it.details?'<br><span style="font-size:0.82rem;color:var(--dim)">'+it.details+'</span>':'')+'</div>';});
+h+='<div style="font-size:0.82rem;color:var(--dim)">'+t('s5n')+': '+akS._name+'<br>'+t('ak_email')+': '+akS._email+(akS._tel?'<br>'+t('ak_tel').replace(' (optional)','')+': '+akS._tel:'')+(akS._addr?'<br>'+t('ak_addr').replace(' (optional)','')+': '+akS._addr:'')+'</div>';
+if(akFiles.length>0)h+='<div style="font-size:0.78rem;color:var(--dim);margin-top:8px">📎 '+akFiles.length+' Foto(s)</div>';
+h+='</div>';
+h+='<div class="cnav"><button class="bbk" onclick="agos(3)">'+t('bB')+'</button><button class="bnx" id="ak-send-btn" onclick="agos(5)">'+t('bS')+'</button></div></div>';
+c.innerHTML=h;
+}
+function submitAkOrder(c){
+var items=[];
+Object.keys(akS).forEach(function(k){if(k.startsWith('_'))return;
+var l=t(AKL[k]||'ak_other'),q=(document.getElementById('aq_'+k)||{}).value||'1',p=(document.getElementById('ap_'+k)||{}).value||'—',d=(document.getElementById('af_'+k)||{}).value||'';
+items.push(l+' ('+q+'x) – '+p+'€'+(d?' | '+d:''));
+});
+var data={access_key:'55063975-8c2f-4676-8af1-a36886eb2297',subject:'Ankaufsanfrage – ReUsing Factory',from_name:'ReUsing Factory Website',Name:akS._name||'',Email:akS._email||'',Telefon:akS._tel||'—',Adresse:akS._addr||'—',Artikel:items.join('\n'),Fotos:akFiles.length>0?akFiles.length+' Foto(s) (separat per Email)':'Keine'};
+c.innerHTML='<div style="text-align:center;padding:40px"><div style="font-size:2rem;margin-bottom:12px">⏳</div><p style="color:var(--dim)">Wird gesendet...</p></div>';
+fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)}).then(function(r){return r.json()}).then(function(){
+c.innerHTML='<div style="text-align:center;padding:40px"><div style="font-size:3rem;margin-bottom:16px">✅</div><h3 style="color:var(--ok);margin-bottom:12px">'+t('ak_confirm')+'</h3><button class="bbk" onclick="resetAk()" style="margin-top:16px">'+t('bR')+'</button></div>';
+}).catch(function(){
+c.innerHTML='<div style="text-align:center;padding:40px"><div style="font-size:3rem;margin-bottom:16px">❌</div><p style="color:var(--red);margin-bottom:12px">Fehler – bitte direkt per Email: kontakt@reusing-factory.de</p><button class="bbk" onclick="agos(4)">'+t('bB')+'</button></div>';
+});
+}
+function resetAk(){akS={};akFiles=[];agos(0);}
 function saveCfg(){try{sessionStorage.setItem('rfcfg',JSON.stringify(cfg));}catch(e){}}
 
 var revAll=false;
@@ -152,7 +257,7 @@ if(m==='all'){ti.textContent=t('rev_title');bd.innerHTML='';for(var i=0;i<REV.le
 else{ti.textContent=t('rev_write');bd.innerHTML='<div style="display:grid;gap:10px"><input class="ta" id="rv_n" placeholder="'+t('s5n')+'" style="resize:none"><textarea class="ta" id="rv_t" rows="4" placeholder="'+t('rev_ph')+'"></textarea><div style="background:rgba(5,15,30,0.6);border:1px solid var(--border);border-radius:6px;padding:10px"><div style="font-size:0.72rem;color:var(--dim);margin-bottom:6px;font-family:\'Share Tech Mono\',monospace">Emojis</div><div style="display:flex;flex-wrap:wrap;gap:4px" id="emo-grid"></div></div><button class="obtn" onclick="sendRev()">'+t('rev_submit')+'</button></div>';var eg=document.getElementById("emo-grid");var emos=["😊","😃","😁","😍","🥰","😎","🤩","😂","🙏","🤝","👍","👏","💪","❤️","🔥","⭐","✨","💯","🎉","🏆","✅","👌","💻","🖥️","🔧","🛠️","📦","🚀","💎","🙂","😉","🤗","😇","🫶","👋","💙","💚","🧡","💛","🤞"];emos.forEach(function(e){var b=document.createElement("span");b.textContent=e;b.style.cssText="cursor:pointer;font-size:1.4rem;padding:4px;border-radius:4px;transition:transform 0.15s;display:inline-block";b.onmouseover=function(){this.style.transform="scale(1.3)"};b.onmouseout=function(){this.style.transform="scale(1)"};b.onclick=function(){var ta=document.getElementById("rv_t");var s=ta.selectionStart;ta.value=ta.value.slice(0,s)+e+ta.value.slice(s);ta.focus();ta.selectionStart=ta.selectionEnd=s+e.length};eg.appendChild(b)});}
 md.style.display='flex';}
 function closeRevModal(){document.getElementById('rev-modal').style.display='none';}
-function sendRev(){var n=document.getElementById('rv_n').value,tx=document.getElementById('rv_t').value;if(!n||!tx){alert(t('aM'));return;}location.href='mailto:kontakt@reusing-factory.de?subject='+encodeURIComponent('Neue Bewertung – '+n)+'&body='+encodeURIComponent('Bewertung von: '+n+'\n\n'+tx);closeRevModal();}
+function sendRev(){var n=document.getElementById('rv_n').value,tx=document.getElementById('rv_t').value;if(!n||!tx){alert(t('aM'));return;}fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'55063975-8c2f-4676-8af1-a36886eb2297',subject:'Neue Bewertung – '+n,from_name:'ReUsing Factory Website',Name:n,Bewertung:tx})}).then(function(){alert('Danke!');closeRevModal();}).catch(function(){alert('Fehler');});}
 window.addEventListener('DOMContentLoaded',function(){var ul=new URLSearchParams(location.search).get('lang'),nl2=navigator.language.slice(0,2),sup=['de','en','fr','it','pl','es','nl'];lang=sup.includes(ul)?ul:(sup.includes(nl2)?nl2:'de');document.querySelectorAll('.lb').forEach(function(b){b.classList.toggle('active',b.dataset.lang===lang);});aT();renderRev();
 var ps=new URLSearchParams(location.search);if(ps.get('paid')==='1'){try{var sc=sessionStorage.getItem('rfcfg');if(sc)cfg=JSON.parse(sc);sessionStorage.removeItem('rfcfg');}catch(e){}showThankYou();}else{sp('home');}});
 function showThankYou(){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});var pg=document.getElementById('page-home');pg.classList.add('active');pg.innerHTML='<div style="max-width:700px;margin:60px auto;padding:20px;text-align:center"><div style="font-size:4rem;margin-bottom:20px">✅</div><h2 style="color:var(--ok);font-size:1.6rem;margin-bottom:12px">'+t('thT')+'</h2><p style="color:var(--dim);font-size:1rem;margin-bottom:28px">'+t('thD')+'</p><div style="text-align:left;background:rgba(41,171,226,0.06);border:1px solid var(--border);border-radius:3px;padding:20px;margin-bottom:20px"><strong style="color:var(--blue);font-size:1rem">'+t('sT')+'</strong><br><br><span style="font-size:1.05rem;color:var(--text)">'+t('sA')+'</span><br><br><em style="color:var(--dim);font-size:0.85rem">'+t('sH')+'</em></div><button class="obtn" onclick="location.href=location.pathname" style="margin-top:12px">↺ Zurück zur Startseite</button></div>';}
