@@ -108,7 +108,7 @@ footer{background:rgba(5,10,20,0.97);border-top:1px solid var(--border);padding:
 footer a{color:var(--dim);text-decoration:none;margin:0 10px}footer a:hover{color:var(--orange)}
 @media(max-width:900px){
   .cards-wrap{grid-template-columns:1fr;padding:16px}
-  .hero{padding:20px 0}.hero>div{flex-direction:column}.hero-logo{padding-left:0;padding-top:16px}.hero-logo img{height:100px;filter:drop-shadow(0 0 40px rgba(41,171,226,0.3)) drop-shadow(0 0 80px rgba(41,171,226,0.15))}
+  .hero{padding:20px 0}.hero>div{flex-direction:column}.hero-logo{padding-left:0;padding-top:16px;margin-left:0;align-self:flex-start}.hero-logo img{height:100px;filter:drop-shadow(0 0 40px rgba(41,171,226,0.3)) drop-shadow(0 0 80px rgba(41,171,226,0.15))}
   .hero-text h1{font-size:1.3rem}
   .kt-box,.ak-wrap,.kt-wrap{padding:16px}
   nav{min-height:auto;flex-wrap:wrap;padding:0;gap:0}
