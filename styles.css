@@ -21,7 +21,7 @@ nav{position:relative;z-index:600;flex-shrink:0;background:rgba(5,15,30,0.97);bo
 .hero-text h1 span{color:var(--orange);text-shadow:0 0 20px var(--orange-glow)}
 .hero-text p{margin-top:10px;color:var(--dim);font-family:'Share Tech Mono',monospace;font-size:0.82rem}
 .hero-logo{flex-shrink:0;margin-left:auto;position:relative;z-index:1;display:flex;align-items:center}
-.hero-logo img{height:200px;filter:drop-shadow(0 0 40px rgba(41,171,226,0.35)) drop-shadow(0 0 80px rgba(41,171,226,0.15))}
+.hero-logo img{height:200px;display:block;filter:drop-shadow(0 0 40px rgba(41,171,226,0.35)) drop-shadow(0 0 80px rgba(41,171,226,0.15))}
 .cards-wrap{padding:32px 40px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1280px;margin:0 auto;width:100%}
 .slogan{max-width:1280px;margin:0 auto;width:100%;padding:14px 40px 0;position:relative;z-index:1}.slogan span{display:inline-block;font-size:clamp(1rem,2vw,1.35rem);font-weight:700;font-style:italic;color:var(--orange);text-shadow:0 0 16px var(--orange-glow);border-bottom:2px solid var(--blue);padding-bottom:10px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:3px;overflow:hidden;cursor:pointer;transition:all 0.25s;display:flex;flex-direction:column}

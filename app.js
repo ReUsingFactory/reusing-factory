@@ -159,9 +159,8 @@ else if(n===4){renderAkReview(c);}
 else if(n===5){submitAkOrder(c);}
 }
 function renderAkIntro(c){
-c.innerHTML='<div class="cstep active"><div class="sq">'+t('ak_intro_title')+'</div>'+
+c.innerHTML='<div class="cstep active"><div class="sq">'+t('ak_intro_title')+' <span style="font-size:0.78rem;color:var(--orange);font-style:italic;font-weight:400">(Bitte vorher bis nach unten durchlesen, danke!)</span></div>'+
 '<div id="ak-intro-scroll" style="max-height:400px;overflow-y:auto;background:rgba(5,15,30,0.9);border:1px solid var(--border);border-radius:3px;padding:20px;font-size:0.85rem;line-height:1.8;color:var(--dim)" onscroll="chkAkScroll()">'+
-'<p style="margin-bottom:14px;color:var(--orange);font-weight:700;font-size:0.85rem;font-style:italic">⬇ Bitte vorher bis nach unten durchlesen, danke!</p>'+
 '<p style="margin-bottom:14px;color:var(--blue);font-weight:700;font-size:1rem">Wir kaufen Ihre beschädigten Hardware-Komponenten an!</p>'+
 '<ul style="margin:0 0 16px 20px;list-style:disc"><li>Grafikkarten von NVidia & AMD</li><li>Mainboards von ASUS, Gigabyte, MSI usw.</li><li>Intel XEON Gold / Platinum etc.</li><li>Intel i3 / i5 / i7 Prozessoren</li><li>AMD Ryzen</li><li>etc.</li></ul>'+
 '<p style="margin-bottom:16px">Komponenten, die älter als 5 Jahre sind, sind in der Regel nicht mehr sehr interessant. Falls Sie jedoch der Meinung sind, doch etwas von Wert zu haben, geben Sie gerne Ihre Preisvorstellung ab.</p>'+
